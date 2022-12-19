@@ -1,0 +1,35 @@
+/* Mobile first */
+.footer {
+  display:flex;
+  font-size: 12px;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 10vh;
+  background-color: #bebdbf;
+  padding: 1.5rem 0;
+}
+
+/* iPad & tablets */
+@media (min-width: 479.999px){
+  .footer{
+    font-size: 20px;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1919.999px){
+  .footer{
+    font-size: 25px;
+    padding: 2.2rem 0;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 2559.999px){
+  .footer{
+    font-size: 30px;
+    padding: 2.7rem 0;
+  }
+}

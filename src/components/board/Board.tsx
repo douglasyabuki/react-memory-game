@@ -16,17 +16,6 @@ const myBoard: number[][] = [
   [0, 0, 0, 0],
 ];
 
-const shownBoard: boolean[][] = [
-  [true, true, true, true],
-  [true, true, true, true],
-  [true, true, true, true],
-];
-
-type coordinates = {
-  row: number;
-  column: number;
-}
-
 const cardsShuffle = (): number[][] => {
   let cards = [...myCards, ...myCards];
   let board = myBoard;
@@ -56,35 +45,44 @@ export default function Board() {
   );
 
   const onClickHandler = (rowId: number, colId: number) => {
-    const clickedCard = currentBoard[rowId][colId];
-    //If card was already selected
-    if (revealedBoard[rowId][colId] === true) {
-      console.log(`Invalid card`);
+    if (!isValidCard(rowId, colId)) {
+      console.log("Invalid card. This one is already face up.");
       return;
     }
-    const copyRevealedBoard = [...revealedBoard];
-    copyRevealedBoard[rowId][colId] = true;
-    setRevealedBoard(copyRevealedBoard);
-      //If first card hasn't been set yet
-      if (!firstCard) {
-        setFirstCard([rowId, colId]);
+    showCard(rowId, colId);
+    if (!firstCard) {
+      setFirstCard([rowId, colId]);
+      return;
+    }
+    if (!compareCards(rowId, colId)) {
+      setTimeout(() => {
+        hideCards(rowId, colId);
+      }, 1000);
+    }
+    setFirstCard(undefined);
+  };
 
-        //If clicked card equals to first card
-      } else {
-        if (clickedCard === currentBoard[firstCard[0]][firstCard[1]]) {
-          console.log(clickedCard);
-          console.log(currentBoard[firstCard[0]][firstCard[1]])
-          //If clicked card differs from first card
-        } else {
-          setTimeout(() => {
-            const newRevealedBoard = [...revealedBoard]
-            newRevealedBoard[rowId][colId] = false;
-            newRevealedBoard[firstCard[0]][firstCard[1]] = false;
-            setRevealedBoard(newRevealedBoard);
-          }, 1000);
-        }
-        setFirstCard(undefined);
-      }
+  const isValidCard = (row: number, col: number): boolean => {
+    return revealedBoard[row][col] === true ? false : true;
+  };
+
+  const showCard = (row: number, col: number): void => {
+    const copyBoard = [...revealedBoard];
+    copyBoard[row][col] = true;
+    setRevealedBoard(copyBoard);
+  };
+
+  const hideCards = (row: number, col: number): void => {
+    const copyBoard = [...revealedBoard];
+    copyBoard[row][col] = false;
+    copyBoard[firstCard![0]][firstCard![1]] = false;
+    setRevealedBoard(copyBoard);
+  };
+
+  const compareCards = (row: number, col: number): boolean => {
+    return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
+      ? true
+      : false;
   };
 
   return (

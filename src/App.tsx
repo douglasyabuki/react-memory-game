@@ -1,14 +1,12 @@
 // Components
-import Header from './components/header/Header'
-import Footer from './components/footer/Footer'
-import Board from './components/board/Board'
+import Board from "./components/board/Board";
+import Footer from "./components/footer/Footer";
+import Header from "./components/header/Header";
 
 // CSS
-import styles from './App.module.css'
+import styles from "./App.module.css";
 
 function App() {
-
-
   return (
     <div>
       <Header></Header>
@@ -17,7 +15,7 @@ function App() {
       </main>
       <Footer></Footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

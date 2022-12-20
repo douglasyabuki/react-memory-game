@@ -1,14 +1,15 @@
 // Components
-import Card from "../cards/Card";
+import Card from "../card/Card";
+
+// Const
+import { easyCardList, mediumCardList, hardCardList } from "../card/card-list/card-list";
 
 // Hooks
 import { useState } from "react";
 
 // CSS
-import styles from "./Board.module.css";
 import RoundButton from "../round-button/RoundButton";
-
-const myCards: number[] = [1, 2, 3, 4, 5, 6];
+import styles from "./Board.module.css";
 
 const myBoard: number[][] = [
   [0, 0, 0, 0],
@@ -17,7 +18,7 @@ const myBoard: number[][] = [
 ];
 
 const cardsShuffle = (): number[][] => {
-  let cards = [...myCards, ...myCards];
+  let cards = [...easyCardList, ...easyCardList];
   let board = myBoard;
   for (var i = cards.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -56,7 +57,7 @@ export default function Board() {
     }
     if (!compareCards(rowId, colId)) {
       setTimeout(() => {
-        hideCards(rowId, colId);
+        hidePair(rowId, colId);
       }, 1000);
     }
     setFirstCard(undefined);
@@ -72,12 +73,16 @@ export default function Board() {
     setRevealedBoard(copyBoard);
   };
 
-  const hideCards = (row: number, col: number): void => {
+  const hidePair = (row: number, col: number): void => {
     const copyBoard = [...revealedBoard];
     copyBoard[row][col] = false;
     copyBoard[firstCard![0]][firstCard![1]] = false;
     setRevealedBoard(copyBoard);
   };
+
+  const hideAllCards = (): void => {
+    setRevealedBoard
+  }
 
   const compareCards = (row: number, col: number): boolean => {
     return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
@@ -85,16 +90,19 @@ export default function Board() {
       : false;
   };
 
+  const resetGame = (): void => {
+    setCurrentBoard(cardsShuffle);
+  }
+
   return (
     <div className={styles.game}>
       <div className={styles.board}>
         {currentBoard.map((row, rowId) => (
           <div className={styles.row} key={rowId}>
             {row.map((card, colId) => (
-              <div className={styles.card} key={colId}>
+              <div className={styles.card} key={colId} onClick={() => onClickHandler(rowId,colId)}>
                 <Card
                   value={card}
-                  onClickHandler={() => onClickHandler(rowId, colId)}
                   isVisible={revealedBoard[rowId][colId]}
                 ></Card>
               </div>
@@ -103,7 +111,7 @@ export default function Board() {
         ))}
       </div>
       <div className={styles.buttonsContainer}>
-        {/* <RoundButton value="Play again"></RoundButton> */}
+        <RoundButton value="Reset" onClickHandler={() => resetGame()}></RoundButton>
       </div>
     </div>
   );

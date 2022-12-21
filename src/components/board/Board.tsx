@@ -1,12 +1,16 @@
 // Components
 import Card from "../card/Card";
-import ControlPanel from "../control-panel/ControlPanel";
+import ControlPanel, { IGameOptions } from "../control-panel/ControlPanel";
 
 // Const
-import { easyCardList, mediumCardList, hardCardList } from "../card/card-list/card-list";
+import {
+  easyCardList,
+  mediumCardList,
+  hardCardList,
+} from "../card/card-list/card-list";
 
 // Hooks
-import { useState } from "react";
+import React, { useState } from "react";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
@@ -38,6 +42,10 @@ const cardsShuffle = (): number[][] => {
 };
 
 export default function Board() {
+  const [gameLevel, setGameLevel] = useState<IGameOptions>({
+    difficulty: 1,
+    lives: [true, true, true, true, true],
+  });
   const [currentBoard, setCurrentBoard] = useState<number[][]>(cardsShuffle);
   const [firstCard, setFirstCard] = useState<number[] | undefined>();
   const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(
@@ -82,8 +90,8 @@ export default function Board() {
   };
 
   const hideAllCards = (): void => {
-    setRevealedBoard
-  }
+    setRevealedBoard;
+  };
 
   const compareCards = (row: number, col: number): boolean => {
     return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
@@ -93,16 +101,27 @@ export default function Board() {
 
   const resetGame = (): void => {
     setCurrentBoard(cardsShuffle);
-  }
+  };
+
+  const onLevelChange = (event: React.ChangeEvent<HTMLInputElement>): number => {
+    return 2;
+  };
 
   return (
     <div className={styles.game}>
-      <ControlPanel lives={[true, true, false]} difficulty={1}></ControlPanel>
+      <ControlPanel
+        lives={gameLevel.lives}
+        difficulty={gameLevel.difficulty}
+      ></ControlPanel>
       <div className={styles.board}>
         {currentBoard.map((row, rowId) => (
           <div className={styles.row} key={rowId}>
             {row.map((card, colId) => (
-              <div className={styles.card} key={colId} onClick={() => onClickHandler(rowId,colId)}>
+              <div
+                className={styles.card}
+                key={colId}
+                onClick={() => onClickHandler(rowId, colId)}
+              >
                 <Card
                   value={card}
                   isVisible={revealedBoard[rowId][colId]}
@@ -113,7 +132,10 @@ export default function Board() {
         ))}
       </div>
       <div className={styles.buttonsContainer}>
-        <RoundButton value="Reset" onClickHandler={() => resetGame()}></RoundButton>
+        <RoundButton
+          value="Reset"
+          onClickHandler={() => resetGame()}
+        ></RoundButton>
       </div>
     </div>
   );

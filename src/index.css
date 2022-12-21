@@ -10,8 +10,3 @@ body {
   background-repeat: no-repeat center center fixed;;
   height: 100%;
 }
-
-hidden {
-  display: none !important;
-  visibility: hidden;
-}

@@ -1,5 +1,6 @@
 // Components
 import Card from "../card/Card";
+import ControlPanel from "../control-panel/ControlPanel";
 
 // Const
 import { easyCardList, mediumCardList, hardCardList } from "../card/card-list/card-list";
@@ -96,6 +97,7 @@ export default function Board() {
 
   return (
     <div className={styles.game}>
+      <ControlPanel lives={[true, true, false]} difficulty={1}></ControlPanel>
       <div className={styles.board}>
         {currentBoard.map((row, rowId) => (
           <div className={styles.row} key={rowId}>

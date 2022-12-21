@@ -13,7 +13,7 @@
   z-index: 999999;
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
-  min-height: 10vh;
+  min-height: 5vh;
 }
 
 /* iPads & tablets */

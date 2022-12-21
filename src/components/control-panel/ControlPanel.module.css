@@ -1,0 +1,15 @@
+.controlPanel{
+    padding: 1rem;
+    width: 400px;
+    height: 150px;
+    margin-bottom: 1rem;
+    border: 1px solid #fff;
+    border-radius: 7.5px;
+}
+
+.heartsContainer{
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    display: flex;
+}

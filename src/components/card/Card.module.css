@@ -6,13 +6,21 @@
   -webkit-perspective: 1500;
 }
 
-.card, .front, .back{
+.cardContainer:hover {
+  border-radius: 85;
+  background: #1f3756;
+  box-shadow: -5px -5px 10px #1a2e47, 5px 5px 10px #244065;
+}
+
+.card,
+.front,
+.back {
   width: 100%;
   height: 100%;
   border-radius: 5px;
 }
 
-.card{
+.card {
   position: relative;
   width: 100%;
   height: 100%;
@@ -22,27 +30,28 @@
   transition: transform 1s;
 }
 
-.front, .back{
+.front,
+.back {
   position: absolute;
   top: 0;
   left: 0;
   -webkit-backface-visibility: hidden;
 }
 
-.front{
+.front {
   overflow: hidden;
   backface-visibility: hidden;
 }
 
-.front h1{
+.front h1 {
   position: relative;
   padding: 35px 0;
 }
 
-.back{
+.back {
   -webkit-transform: rotateY(180deg);
 }
 
-.flipped{
+.flipped {
   transform: translateX(-100%) rotateY(-180deg);
 }

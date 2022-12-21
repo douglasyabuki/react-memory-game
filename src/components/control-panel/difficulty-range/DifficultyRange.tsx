@@ -3,7 +3,7 @@ import styles from "./DifficultyRange.module.css";
 
 // Props destructuring
 interface Props {
-  difficulty: number
+  difficulty: number;
 }
 
 export default function DifficultyRange({difficulty}: Props) {

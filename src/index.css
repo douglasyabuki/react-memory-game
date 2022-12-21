@@ -7,6 +7,8 @@
 html,
 body {
   background-image: radial-gradient(circle at top,rgb(31, 55, 86), rgb(20, 21, 57));
-  background-repeat: no-repeat center center fixed;;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   height: 100%;
 }

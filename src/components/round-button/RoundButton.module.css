@@ -49,13 +49,13 @@
   }
   
   /* Large Screen */
-  @media (min-width: 1919.999px) {
+  /* @media (min-width: 1919.999px) {
     .buttonContainer button {
       height: 150px;
       width: 150px;
       font-size: 30px;
     }
-  }
+  } */
   
   /* Larger Screen */
   @media (min-width: 2559.999px) {

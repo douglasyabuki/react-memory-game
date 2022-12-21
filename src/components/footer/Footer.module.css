@@ -1,27 +1,51 @@
 /* Mobile first */
 .footer {
   display:flex;
-  font-size: 12px;
+  flex-direction: column;
+  font-size: 10px;
   text-align: center;
   justify-content: center;
   position: relative;
   width: 100%;
   height: 5vh;
-  background-color: #bebdbf;
+  background-color: #1F232D;
+  color: rgba(116, 116, 116, 0.5);
+  font-weight: 300;
   padding: 1.5rem 0;
+}
+
+.social{
+  display: flex;
+  gap: .5rem;
+}
+
+.social a{
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid #1F232D;
+  opacity: 0.75;
+  margin-bottom: .5rem;
+}
+
+.social a:hover {
+  opacity: 0.9;
+  background: #D9D8D7;
 }
 
 /* iPad & tablets */
 @media (min-width: 479.999px){
   .footer{
-    font-size: 20px;
+    font-size: 15px;
   }
 }
 
 /* Large screens */
 @media (min-width: 1919.999px){
   .footer{
-    font-size: 25px;
     padding: 2.2rem 0;
   }
 }

@@ -6,7 +6,7 @@ import ControlPanel, { IGameOptions } from "../control-panel/ControlPanel";
 import { boardList } from "./board-list/board-list";
 
 // Hooks
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Utils
 import { boardShuffle } from "../../utils/board-shuffle";
@@ -19,14 +19,10 @@ const initialBoard = boardShuffle(1);
 
 export default function Board() {
   const [difficulty, setDifficulty] = useState<number>(1);
-  const [lives, setLives] = useState<boolean[]>([true,true,true,true,true]);
+  const [lives, setLives] = useState<boolean[]>([true, true, true, true, true]);
   const [currentBoard, setCurrentBoard] = useState<number[][]>(initialBoard);
   const [firstCard, setFirstCard] = useState<number[] | undefined>();
-  const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(
-    new Array(currentBoard.length)
-      .fill("")
-      .map(() => new Array(currentBoard[0].length).fill(false))
-  );
+  const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(boardList.visibleEasy);
 
   const onClickHandler = (rowId: number, colId: number) => {
     if (livesCounter() < 1) {
@@ -91,24 +87,27 @@ export default function Board() {
   const hideCards = (): void => {
     switch (difficulty) {
       case 2: {
-        setRevealedBoard(boardList.invisibleMedium);
+        let copy = [...boardList.invisibleMedium];
+        setRevealedBoard(copy);
         break;
       }
       case 3: {
-        setRevealedBoard(boardList.invisibleHard);
+        let copy = [...boardList.invisibleHard];
+        setRevealedBoard(copy);
         break;
       }
       default: {
-        setRevealedBoard(boardList.invisibleEasy);
+        let copy = [...boardList.invisibleEasy];
+        setRevealedBoard(copy);
         break;
       }
     }
   };
 
-  const resetGame = (): void => {
+  const resetGame = () => {
     switch (difficulty) {
       case 2: {
-        setLives([true, true, true, true])
+        setLives([true, true, true, true]);
         setCurrentBoard(boardShuffle(2));
         setRevealedBoard(boardList.visibleMedium);
         break;
@@ -131,10 +130,13 @@ export default function Board() {
     }, 4000);
   };
 
+  useEffect(() => {
+    resetGame();
+  }, [difficulty || resetGame]);
+
   const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDifficulty(parseInt(event.target.value));
-    resetGame();
-  }
+  };
 
   return (
     <div className={styles.game}>

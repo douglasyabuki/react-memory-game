@@ -1,16 +1,20 @@
 // CSS
+import React from "react";
 import styles from "./DifficultyRange.module.css";
 
 // Props destructuring
 interface Props {
-  difficulty: number;
+  min: number;
+  max: number;
+  current: number;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function DifficultyRange({difficulty}: Props) {
+export default function DifficultyRange({min, max, current, onChange}: Props) {
   return (
     <div className={styles.difficultyRange}>
       <label>Level</label>
-      <input type="range" id="difficulty" name="difficulty" min={1} max={3} step={1} value={difficulty}/>
+      <input type="range" id="difficulty" name="difficulty" min={min} max={max} value={current} onChange={onChange}/>
     </div>
   );
 }

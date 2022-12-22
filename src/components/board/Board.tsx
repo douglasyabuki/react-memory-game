@@ -3,50 +3,24 @@ import Card from "../card/Card";
 import ControlPanel, { IGameOptions } from "../control-panel/ControlPanel";
 
 // Const
-import {
-  easyCardList,
-  mediumCardList,
-  hardCardList,
-} from "../card/card-list/card-list";
+import { boardList } from "./board-list/board-list";
 
 // Hooks
-import React, { useState } from "react";
+import { useState } from "react";
+
+// Utils
+import { boardShuffle } from "../../utils/board-shuffle";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
 import styles from "./Board.module.css";
 
-const myBoard: number[][] = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
-
-const cardsShuffle = (): number[][] => {
-  let cards = [...easyCardList, ...easyCardList];
-  let board = myBoard;
-  for (var i = cards.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = cards[i];
-    cards[i] = cards[j];
-    cards[j] = temp;
-  }
-  let counter = 0;
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 4; col++) {
-      board[row][col] = cards[counter];
-      counter++;
-    }
-  }
-  return board;
-};
+const initialBoard = boardShuffle(1);
 
 export default function Board() {
-  const [gameLevel, setGameLevel] = useState<IGameOptions>({
-    difficulty: 1,
-    lives: [true, true, true, true, true],
-  });
-  const [currentBoard, setCurrentBoard] = useState<number[][]>(cardsShuffle);
+  const [difficulty, setDifficulty] = useState<number>(1);
+  const [lives, setLives] = useState<boolean[]>([true,true,true,true,true]);
+  const [currentBoard, setCurrentBoard] = useState<number[][]>(initialBoard);
   const [firstCard, setFirstCard] = useState<number[] | undefined>();
   const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(
     new Array(currentBoard.length)
@@ -55,6 +29,12 @@ export default function Board() {
   );
 
   const onClickHandler = (rowId: number, colId: number) => {
+    if (livesCounter() < 1) {
+      console.log(
+        "You already lost. Try decreasing the difficulty and play again"
+      );
+      return;
+    }
     if (!isValidCard(rowId, colId)) {
       console.log("Invalid card. This one is already face up.");
       return;
@@ -67,6 +47,7 @@ export default function Board() {
     if (!compareCards(rowId, colId)) {
       setTimeout(() => {
         hidePair(rowId, colId);
+        removeLife();
       }, 1000);
     }
     setFirstCard(undefined);
@@ -89,29 +70,80 @@ export default function Board() {
     setRevealedBoard(copyBoard);
   };
 
-  const hideAllCards = (): void => {
-    setRevealedBoard;
-  };
-
   const compareCards = (row: number, col: number): boolean => {
     return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
       ? true
       : false;
   };
 
-  const resetGame = (): void => {
-    setCurrentBoard(cardsShuffle);
+  const livesCounter = (): number => {
+    let count = lives.filter((x) => x === true).length;
+    return count;
   };
 
-  const onLevelChange = (event: React.ChangeEvent<HTMLInputElement>): number => {
-    return 2;
+  const removeLife = (): void => {
+    let count = livesCounter();
+    let copy = [...lives];
+    copy[count - 1] = false;
+    setLives(copy);
   };
+
+  const hideCards = (): void => {
+    switch (difficulty) {
+      case 2: {
+        setRevealedBoard(boardList.invisibleMedium);
+        break;
+      }
+      case 3: {
+        setRevealedBoard(boardList.invisibleHard);
+        break;
+      }
+      default: {
+        setRevealedBoard(boardList.invisibleEasy);
+        break;
+      }
+    }
+  };
+
+  const resetGame = (): void => {
+    switch (difficulty) {
+      case 2: {
+        setLives([true, true, true, true])
+        setCurrentBoard(boardShuffle(2));
+        setRevealedBoard(boardList.visibleMedium);
+        break;
+      }
+      case 3: {
+        setLives([true, true, true]);
+        setCurrentBoard(boardShuffle(3));
+        setRevealedBoard(boardList.visibleHard);
+        break;
+      }
+      default: {
+        setLives([true, true, true, true, true]);
+        setCurrentBoard(boardShuffle(1));
+        setRevealedBoard(boardList.visibleEasy);
+        break;
+      }
+    }
+    setTimeout(() => {
+      hideCards();
+    }, 4000);
+  };
+
+  const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDifficulty(parseInt(event.target.value));
+    resetGame();
+  }
 
   return (
     <div className={styles.game}>
       <ControlPanel
-        lives={gameLevel.lives}
-        difficulty={gameLevel.difficulty}
+        lives={lives}
+        min={1}
+        max={3}
+        current={difficulty}
+        onChange={handleLevelChange}
       ></ControlPanel>
       <div className={styles.board}>
         {currentBoard.map((row, rowId) => (

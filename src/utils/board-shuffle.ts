@@ -1,6 +1,8 @@
-import { cardList } from "../components/card/card-list/card-list";
+// Const
 import { boardList } from "../components/board/board-list/board-list";
+import { cardList } from "../components/card/card-list/card-list";
 
+// Function to shuffle card list
 const cardsShuffle = (selectedCards: number[]): number[] => {
     let cards = [...selectedCards, ...selectedCards];
 
@@ -14,7 +16,8 @@ const cardsShuffle = (selectedCards: number[]): number[] => {
     return cards;
 }
 
-const shuffler = (cards: number[], board: number[][]): number[][] => {
+// Function to set the card values in a board
+const setter = (cards: number[], board: number[][]): number[][] => {
     const rows = board.length;
     const columns = board[0].length;
     let counter = 0;
@@ -27,18 +30,19 @@ const shuffler = (cards: number[], board: number[][]): number[][] => {
     return board;
 };
 
+// Function to return a shuffled board based on game difficulty
 export const boardShuffle = (difficulty: number): number[][] => {
     switch(difficulty){
         case 2:{
-            let shuffledBoard = shuffler(cardsShuffle(cardList.medium), boardList.medium);
+            let shuffledBoard = setter(cardsShuffle(cardList.medium), boardList.medium);
             return shuffledBoard;
         }
         case 3:{
-            let shuffledBoard = shuffler(cardsShuffle(cardList.hard), boardList.hard);
+            let shuffledBoard = setter(cardsShuffle(cardList.hard), boardList.hard);
             return shuffledBoard;
         }
         default:{
-            let shuffledBoard = shuffler(cardsShuffle(cardList.easy), boardList.easy);
+            let shuffledBoard = setter(cardsShuffle(cardList.easy), boardList.easy);
             return shuffledBoard;
         }
     }

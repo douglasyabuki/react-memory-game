@@ -1,15 +1,17 @@
 // Components
 import Card from "../card/Card";
-import ControlPanel, { IGameOptions } from "../control-panel/ControlPanel";
+import ControlPanel from "../control-panel/ControlPanel";
 
 // Const
 import { boardList } from "./board-list/board-list";
 
 // Hooks
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Utils
 import { boardShuffle } from "../../utils/board-shuffle";
+import { deepClone } from "../../utils/deep-clone";
+import { findFalseValue } from "../../utils/find-false-value";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
@@ -18,17 +20,17 @@ import styles from "./Board.module.css";
 const initialBoard = boardShuffle(1);
 
 export default function Board() {
-  const [difficulty, setDifficulty] = useState<number>(1);
-  const [lives, setLives] = useState<boolean[]>([true, true, true, true, true]);
   const [currentBoard, setCurrentBoard] = useState<number[][]>(initialBoard);
+  const [difficulty, setDifficulty] = useState<number>(1);
   const [firstCard, setFirstCard] = useState<number[] | undefined>();
-  const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(boardList.visibleEasy);
+  const [gameOver, setGameOver] = useState<string>();
+  const [lives, setLives] = useState<boolean[]>([true, true, true, true, true]);
+  const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(
+    boardList.visibleEasy
+  );
 
   const onClickHandler = (rowId: number, colId: number) => {
-    if (livesCounter() < 1) {
-      console.log(
-        "You already lost. Try decreasing the difficulty and play again"
-      );
+    if (isOver()) {
       return;
     }
     if (!isValidCard(rowId, colId)) {
@@ -43,10 +45,23 @@ export default function Board() {
     if (!compareCards(rowId, colId)) {
       setTimeout(() => {
         hidePair(rowId, colId);
-        removeLife();
+        removeLife();        
       }, 1000);
     }
     setFirstCard(undefined);
+    isOver();
+  };
+
+  const isOver = (): boolean => {
+    if (countLives() < 1) {
+      setGameOver("You lose");
+      return true;
+    }
+    if (!findFalseValue(revealedBoard)) {
+      setGameOver("You win");
+      return true;
+    }
+    return false;
   };
 
   const isValidCard = (row: number, col: number): boolean => {
@@ -66,42 +81,42 @@ export default function Board() {
     setRevealedBoard(copyBoard);
   };
 
+  const hideCards = (): void => {
+    switch (difficulty) {
+      case 2: {
+        let copy = deepClone(boardList.invisibleMedium);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+        break;
+      }
+      case 3: {
+        let copy = deepClone(boardList.invisibleHard);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+        break;
+      }
+      default: {
+        let copy = deepClone(boardList.invisibleEasy);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+        break;
+      }
+    }
+  };
+
   const compareCards = (row: number, col: number): boolean => {
     return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
       ? true
       : false;
   };
 
-  const livesCounter = (): number => {
+  const countLives = (): number => {
     let count = lives.filter((x) => x === true).length;
     return count;
   };
 
   const removeLife = (): void => {
-    let count = livesCounter();
+    let count = countLives();
     let copy = [...lives];
     copy[count - 1] = false;
     setLives(copy);
-  };
-
-  const hideCards = (): void => {
-    switch (difficulty) {
-      case 2: {
-        let copy = [...boardList.invisibleMedium];
-        setRevealedBoard(copy);
-        break;
-      }
-      case 3: {
-        let copy = [...boardList.invisibleHard];
-        setRevealedBoard(copy);
-        break;
-      }
-      default: {
-        let copy = [...boardList.invisibleEasy];
-        setRevealedBoard(copy);
-        break;
-      }
-    }
   };
 
   const resetGame = () => {
@@ -109,34 +124,38 @@ export default function Board() {
       case 2: {
         setLives([true, true, true, true]);
         setCurrentBoard(boardShuffle(2));
-        setRevealedBoard(boardList.visibleMedium);
+        let copy = deepClone(boardList.visibleMedium);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
         break;
       }
       case 3: {
         setLives([true, true, true]);
         setCurrentBoard(boardShuffle(3));
-        setRevealedBoard(boardList.visibleHard);
+        let copy = deepClone(boardList.visibleHard);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
         break;
       }
       default: {
         setLives([true, true, true, true, true]);
         setCurrentBoard(boardShuffle(1));
-        setRevealedBoard(boardList.visibleEasy);
+        let copy = deepClone(boardList.visibleEasy);
+        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
         break;
       }
     }
     setTimeout(() => {
       hideCards();
     }, 4000);
+    setGameOver('');
+  };
+
+  const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDifficulty(parseInt(event.target.value));
   };
 
   useEffect(() => {
     resetGame();
   }, [difficulty || resetGame]);
-
-  const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDifficulty(parseInt(event.target.value));
-  };
 
   return (
     <div className={styles.game}>
@@ -165,11 +184,11 @@ export default function Board() {
           </div>
         ))}
       </div>
+      <div className={styles.message}>
+        <h2>{gameOver}</h2>
+      </div>
       <div className={styles.buttonsContainer}>
-        <RoundButton
-          value="Reset"
-          onClickHandler={() => resetGame()}
-        ></RoundButton>
+        <RoundButton value="Reset" onClickHandler={resetGame}></RoundButton>
       </div>
     </div>
   );

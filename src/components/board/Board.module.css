@@ -16,3 +16,8 @@
     display: flex;
     gap: 1rem;
 }
+
+.message{
+    height: 10vh;
+    color: white;
+}

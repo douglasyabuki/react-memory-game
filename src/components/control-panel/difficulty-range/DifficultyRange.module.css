@@ -11,32 +11,6 @@
     color: #fff;
 }
 
-/* .difficultyRange input[type=range] {
-  height: 20px;
-  border-radius: 50%;
-  -webkit-appearance: none;
-  margin: 10px 0;
-  width: 100%;
-}
-
-.difficultyRange input[type=range]::-webkit-slider-runnable-track{
-  width: 100%;
-  height: 20px;
-  cursor: pointer;
-  background: #3071A9;
-  border-radius: 50px;
-}
-
-.difficultyRange input[type=range]::-webkit-slider-thumb {
-  border: 1px solid #000000;
-  height: 20px;
-  width: 35px;
-  border-radius: 50px;
-  background: #FFFFFF;
-  cursor: pointer;
-  -webkit-appearance: none;
-} */
-
 .difficultyRange input {
   -webkit-appearance: none;
   width: 100%;

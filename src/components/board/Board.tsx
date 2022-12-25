@@ -6,59 +6,73 @@ import ControlPanel from "../control-panel/ControlPanel";
 import { boardList } from "./board-list/board-list";
 
 // Hooks
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useImmerReducer } from "use-immer";
+import produce from "immer";
+import { initialState, ActionType, reducer } from "./reducer/reducer";
 
 // Utils
 import { boardShuffle } from "../../utils/board-shuffle";
-import { deepClone } from "../../utils/deep-clone";
 import { findFalseValue } from "../../utils/find-false-value";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
 import styles from "./Board.module.css";
-
-const initialBoard = boardShuffle(1);
+import { chooseState } from "../../utils/choose-state";
 
 export default function Board() {
-  const [currentBoard, setCurrentBoard] = useState<number[][]>(initialBoard);
-  const [difficulty, setDifficulty] = useState<number>(1);
-  const [firstCard, setFirstCard] = useState<number[] | undefined>();
-  const [gameOver, setGameOver] = useState<string>();
-  const [lives, setLives] = useState<boolean[]>([true, true, true, true, true]);
-  const [revealedBoard, setRevealedBoard] = useState<boolean[][]>(
-    boardList.visibleEasy
-  );
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const {
+    currentBoard,
+    difficulty,
+    firstCard,
+    gameOver,
+    lives,
+    revealedBoard,
+    isComparing,
+    reRender
+  } = state;
 
   const onClickHandler = (rowId: number, colId: number) => {
+    // Cannot click if the cards are currently being compared
+    if (isComparing) {
+      return;
+    }
+    // Cannot click if game is over
     if (isOver()) {
       return;
     }
+    // Cannot select if card is already face up
     if (!isValidCard(rowId, colId)) {
       console.log("Invalid card. This one is already face up.");
       return;
     }
+    // Shows card on click
     showCard(rowId, colId);
+    // If it is not the first card, sets the value to the first card
     if (!firstCard) {
-      setFirstCard([rowId, colId]);
+      dispatch({ type: ActionType.SET_FIRST_CARD, payload: [rowId, colId] });
       return;
     }
     if (!compareCards(rowId, colId)) {
+      dispatch({ type: ActionType.SET_IS_COMPARING, payload: true });
       setTimeout(() => {
         hidePair(rowId, colId);
-        removeLife();        
+        removeLife();
+        dispatch({ type: ActionType.SET_IS_COMPARING, payload: false });
       }, 1000);
     }
-    setFirstCard(undefined);
+    dispatch({ type: ActionType.SET_FIRST_CARD, payload: undefined });
     isOver();
   };
 
   const isOver = (): boolean => {
     if (countLives() < 1) {
-      setGameOver("You lose");
+      dispatch({ type: ActionType.SET_GAME_OVER, payload: "You lose" });
       return true;
     }
     if (!findFalseValue(revealedBoard)) {
-      setGameOver("You win");
+      dispatch({ type: ActionType.SET_GAME_OVER, payload: "You win" });
       return true;
     }
     return false;
@@ -69,36 +83,41 @@ export default function Board() {
   };
 
   const showCard = (row: number, col: number): void => {
-    const copyBoard = [...revealedBoard];
-    copyBoard[row][col] = true;
-    setRevealedBoard(copyBoard);
+    dispatch({
+      type: ActionType.SET_REVEALED_BOARD,
+      payload: produce(revealedBoard, (draft) => {
+        draft[row][col] = true;
+      }),
+    });
   };
 
   const hidePair = (row: number, col: number): void => {
-    const copyBoard = [...revealedBoard];
-    copyBoard[row][col] = false;
-    copyBoard[firstCard![0]][firstCard![1]] = false;
-    setRevealedBoard(copyBoard);
+    dispatch({
+      type: ActionType.SET_REVEALED_BOARD,
+      payload: produce(revealedBoard, (draft) => {
+        draft[row][col] = false;
+        draft[firstCard![0]][firstCard![1]] = false;
+      }),
+    });
   };
 
   const hideCards = (): void => {
+    let copy: boolean[][];
     switch (difficulty) {
-      case 2: {
-        let copy = deepClone(boardList.invisibleMedium);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+      default:
+        copy = [...boardList.invisibleEasy];
         break;
-      }
-      case 3: {
-        let copy = deepClone(boardList.invisibleHard);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+      case 2:
+        copy = [...boardList.invisibleMedium];
         break;
-      }
-      default: {
-        let copy = deepClone(boardList.invisibleEasy);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
+      case 3:
+        copy = [...boardList.invisibleHard];
         break;
-      }
     }
+    dispatch({
+      type: ActionType.SET_REVEALED_BOARD,
+      payload: copy,
+    });
   };
 
   const compareCards = (row: number, col: number): boolean => {
@@ -114,46 +133,35 @@ export default function Board() {
 
   const removeLife = (): void => {
     let count = countLives();
+    if (count < 1) {
+      return;
+    }
     let copy = [...lives];
     copy[count - 1] = false;
-    setLives(copy);
+    dispatch({ type: ActionType.SET_LIVES, payload: copy });
   };
 
   const resetGame = () => {
-    switch (difficulty) {
-      case 2: {
-        setLives([true, true, true, true]);
-        setCurrentBoard(boardShuffle(2));
-        let copy = deepClone(boardList.visibleMedium);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
-        break;
-      }
-      case 3: {
-        setLives([true, true, true]);
-        setCurrentBoard(boardShuffle(3));
-        let copy = deepClone(boardList.visibleHard);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
-        break;
-      }
-      default: {
-        setLives([true, true, true, true, true]);
-        setCurrentBoard(boardShuffle(1));
-        let copy = deepClone(boardList.visibleEasy);
-        setRevealedBoard((revealedBoard) => (revealedBoard = copy));
-        break;
-      }
-    }
+    let nextState = chooseState(difficulty);
+    dispatch({type: ActionType.SET_CURRENT_BOARD, payload: nextState.board});
+    dispatch({type: ActionType.SET_REVEALED_BOARD, payload: nextState.visibleBoard});
+    dispatch({type: ActionType.SET_LIVES, payload: nextState.lives});
+    dispatch({ type: ActionType.SET_FIRST_CARD, payload: undefined });
+    
     setTimeout(() => {
-      hideCards();
+      dispatch({type: ActionType.SET_REVEALED_BOARD, payload: nextState.invisibleBoard});
     }, 4000);
-    setGameOver('');
   };
 
   const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDifficulty(parseInt(event.target.value));
+    dispatch({
+      type: ActionType.SET_DIFFICULTY,
+      payload: Number(event.target.value),
+    });
   };
 
   useEffect(() => {
+    dispatch({ type: ActionType.SET_GAME_OVER, payload: ""});
     resetGame();
   }, [difficulty || resetGame]);
 
@@ -166,30 +174,28 @@ export default function Board() {
         current={difficulty}
         onChange={handleLevelChange}
       ></ControlPanel>
-      <div className={styles.board}>
-        {currentBoard.map((row, rowId) => (
-          <div className={styles.row} key={rowId}>
-            {row.map((card, colId) => (
-              <div
-                className={styles.card}
-                key={colId}
-                onClick={() => onClickHandler(rowId, colId)}
-              >
-                <Card
-                  value={card}
-                  isVisible={revealedBoard[rowId][colId]}
-                ></Card>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div className={styles.message}>
-        <h2>{gameOver}</h2>
-      </div>
-      <div className={styles.buttonsContainer}>
-        <RoundButton value="Reset" onClickHandler={resetGame}></RoundButton>
-      </div>
+      {gameOver ? (
+        <div className={styles.gameOver}>
+          <h1>{gameOver}</h1>
+          <RoundButton value="Restart" onClickHandler={() => resetGame()} />
+        </div>
+      ) : (
+        <div className={styles.board}>
+          {currentBoard.map((row, rowIndex) => (
+            <div key={rowIndex} className={styles.row}>
+              {row.map((col, colIndex) => (
+                <div onClick={() => onClickHandler(rowIndex, colIndex)}>
+                  <Card
+                    key={colIndex}
+                    value={col}
+                    isVisible={revealedBoard[rowIndex][colIndex]}
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

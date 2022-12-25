@@ -18,16 +18,17 @@ const cardsShuffle = (selectedCards: number[]): number[] => {
 
 // Function to set the card values in a board
 const setter = (cards: number[], board: number[][]): number[][] => {
-    const rows = board.length;
-    const columns = board[0].length;
+    let rows = board.length;
+    let columns = board[0].length
     let counter = 0;
+    let newBoard = [...board];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        board[row][col] = cards[counter];
+        newBoard[row][col] = cards[counter];
         counter++;
       }
     }
-    return board;
+    return newBoard;
 };
 
 // Function to return a shuffled board based on game difficulty

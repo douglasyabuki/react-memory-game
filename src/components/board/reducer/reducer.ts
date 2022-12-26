@@ -2,17 +2,19 @@
 import produce from "immer";
 
 // Utils
-import { boardList } from "../board-list/board-list";
 import { chooseState } from "../../../utils/choose-state";
 
+const chosenInitialState = chooseState(1);
+
 export const initialState = {
-  difficulty: 1,
-  currentBoard: boardList.board,
-  revealedBoard: boardList.visible,
-  lives: [true, true, true, true, true],
-  firstCard: undefined,
-  isComparing: false,
-  gameOver: "",
+  difficulty: chosenInitialState.difficulty,
+  currentBoard: chosenInitialState.currentBoard,
+  revealedBoard: chosenInitialState.revealedBoard,
+  lives: chosenInitialState.lives,
+  firstCard: chosenInitialState.firstCard,
+  isComparing: chosenInitialState.isComparing,
+  gameOver: chosenInitialState.gameOver,
+  levelChangeDisabled: chosenInitialState.levelChangeDisabled
 };
 
 type State = {
@@ -20,9 +22,10 @@ type State = {
   currentBoard: number[][];
   revealedBoard: boolean[][];
   lives: boolean[];
-  firstCard: undefined;
+  firstCard: undefined | number[];
   isComparing: boolean;
   gameOver: string;
+  levelChangeDisabled: boolean;
 }
 
 export enum ActionType {
@@ -33,7 +36,8 @@ export enum ActionType {
   SET_FIRST_CARD = "SET_FIRST_CARD",
   SET_IS_COMPARING = "SET_IS_COMPARING",
   SET_GAME_OVER = "SET_GAME_OVER",
-  SET_NEW_GAME = "SET_NEW_GAME"
+  SET_NEW_GAME = "SET_NEW_GAME",
+  SET_LEVEL_CHANGE_DISABLED = "SET_LEVEL_CHANGE_DISABLED"
 }
 
 interface Action {
@@ -68,13 +72,19 @@ export const reducer = (state: State, action: Action) =>
         draft.isComparing = action.payload;
         break;
       case ActionType.SET_NEW_GAME:
-        const payload = action.payload;
-        draft.difficulty = payload.difficulty;
-        draft.currentBoard = payload.currentBoard;
-        draft.revealedBoard = payload.revealedBoard;
-        draft.lives = payload.lives;
-        draft.isComparing = payload.isComparing;
-        draft.gameOver = payload.gameOver;
+        const { difficulty } = action.payload;
+        return produce(state, draft => {
+          draft.difficulty = difficulty;
+          let newState = chooseState(difficulty)
+          draft.currentBoard = newState.currentBoard;
+          draft.revealedBoard = newState.revealedBoard;
+          draft.lives = newState.lives;
+          draft.isComparing = newState.isComparing;
+          draft.gameOver = newState.gameOver
+          draft.levelChangeDisabled = newState.levelChangeDisabled;
+        })
+      case ActionType.SET_LEVEL_CHANGE_DISABLED:
+        draft.levelChangeDisabled = action.payload;
         break;
     }
   });

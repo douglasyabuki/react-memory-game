@@ -1,12 +1,12 @@
 // CSS
-import styles from './Heart.module.css'
+import styles from "./Heart.module.css";
 
 // Props destructuring
 interface Props {
-    heartState: boolean;
+  heartState: boolean;
 }
 
-export default function Heart ({heartState}: Props) {
+export default function Heart({ heartState }: Props) {
   return (
     <div className={styles.heartContainer}>
       <div className={heartState ? styles.heart : styles.lostHeart}></div>

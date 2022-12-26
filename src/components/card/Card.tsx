@@ -13,7 +13,7 @@ export default function Card({ value, isVisible }: ICardProps) {
       >
         <img
           className={`${styles.front} ${styles.cardFace}`}
-          src={`card${value}.jpg`}
+          src={value ? `card${value}.jpg` : ``}
         />
         <img
           className={`${styles.back} ${styles.cardFace}`}

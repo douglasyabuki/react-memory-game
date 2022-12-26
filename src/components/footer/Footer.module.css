@@ -1,6 +1,6 @@
 /* Mobile first */
 .footer {
-  display:flex;
+  display: flex;
   flex-direction: column;
   font-size: 10px;
   text-align: center;
@@ -8,51 +8,51 @@
   position: relative;
   width: 100%;
   height: 5vh;
-  background-color: #1F232D;
+  background-color: #1f232d;
   color: rgba(116, 116, 116, 0.5);
   font-weight: 300;
   padding: 1.5rem 0;
 }
 
-.social{
+.social {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
-.social a{
+.social a {
   width: 40px;
   height: 40px;
   line-height: 40px;
   display: inline-block;
   text-align: center;
   border-radius: 50%;
-  border: 1px solid #1F232D;
+  border: 1px solid #1f232d;
   opacity: 0.75;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .social a:hover {
   opacity: 0.9;
-  background: #D9D8D7;
+  background: #d9d8d7;
 }
 
 /* iPad & tablets */
-@media (min-width: 479.999px){
-  .footer{
+@media (min-width: 479.999px) {
+  .footer {
     font-size: 15px;
   }
 }
 
 /* Large screens */
-@media (min-width: 1919.999px){
-  .footer{
+@media (min-width: 1919.999px) {
+  .footer {
     padding: 2.2rem 0;
   }
 }
 
 /* Larger screens */
-@media (min-width: 2559.999px){
-  .footer{
+@media (min-width: 2559.999px) {
+  .footer {
     font-size: 30px;
     padding: 2.7rem 0;
   }

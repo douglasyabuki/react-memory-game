@@ -1,21 +1,21 @@
-.controlPanel{
-    padding: 1rem;
-    width: 300px;
-    height: 150px;
-    margin-bottom: 1rem;
-    border: 2px solid #fff;
-    color: rgba(255, 255, 255, .8);
-    border-radius: 7.5px;
-    font-size: 12px;
+.controlPanel {
+  padding: 1rem;
+  width: 300px;
+  height: 150px;
+  margin-bottom: 1rem;
+  border: 2px solid #fff;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 7.5px;
+  font-size: 12px;
 }
 
-.controlPanel h1{
-    margin-bottom: 1rem;
+.controlPanel h1 {
+  margin-bottom: 1rem;
 }
 
-.heartsContainer{
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    display: flex;
+.heartsContainer {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
 }

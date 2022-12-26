@@ -5,10 +5,10 @@
   height: 80px;
 }
 
-.difficultyRange label{
+.difficultyRange label {
   text-transform: uppercase;
   font-weight: 600;
-    color: #fff;
+  color: #fff;
 }
 
 .difficultyRange input {
@@ -18,14 +18,18 @@
   background: #ddd;
   outline: none;
   opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.difficultyRange input:disabled {
+  opacity: .2;
 }
 
 .difficultyRange input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 40px;
+  width: 30px;
   height: 20px;
   background: #4caf50;
   cursor: pointer;

@@ -2,14 +2,11 @@
 import Card from "../card/Card";
 import ControlPanel from "../control-panel/ControlPanel";
 
-// Const
-import { boardList } from "./board-list/board-list";
-
 // Hooks
+import produce from "immer";
 import { useEffect } from "react";
 import { useImmerReducer } from "use-immer";
-import produce from "immer";
-import { initialState, ActionType, reducer } from "./reducer/reducer";
+import { ActionType, initialState, reducer } from "./reducer/reducer";
 
 // Utils
 import { chooseState } from "../../utils/choose-state";
@@ -17,6 +14,7 @@ import { findFalseValue } from "../../utils/find-false-value";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
+import { boardList } from "./board-list/board-list";
 import styles from "./Board.module.css";
 
 export default function Board() {
@@ -29,6 +27,7 @@ export default function Board() {
     lives,
     revealedBoard,
     isComparing,
+    levelChangeDisabled,
   } = state;
 
   const onClickHandler = (rowId: number, colId: number) => {
@@ -128,19 +127,10 @@ export default function Board() {
   };
 
   const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let nextState = chooseState(Number(event.target.value));
     dispatch({
-      type: ActionType.SET_NEW_GAME,
-      payload: {
-        difficulty: nextState.difficulty,
-        currentBoard: nextState.currentBoard,
-        revealedBoard: nextState.revealedBoard,
-        lives: nextState.lives,
-        isComparing: nextState.isComparing,
-        gameOver: nextState.gameOver,
-      },
+      type: ActionType.SET_DIFFICULTY,
+      payload: Number(event.target.value),
     });
-
   };
 
   const resetGame = () => {
@@ -154,23 +144,30 @@ export default function Board() {
         lives: nextState.lives,
         isComparing: nextState.isComparing,
         gameOver: nextState.gameOver,
+        levelChangeDisabled: nextState.levelChangeDisabled,
       },
     });
 
     setTimeout(() => {
       hideCards();
+      dispatch({
+        type: ActionType.SET_LEVEL_CHANGE_DISABLED,
+        payload: false
+      })
     }, 4000);
   };
 
   useEffect(() => {
-  }, [difficulty || resetGame]);
+    resetGame();
+  }, [difficulty]);
 
   return (
     <div className={styles.game}>
       <ControlPanel
+        disabled={levelChangeDisabled}
         lives={lives}
         min={1}
-        max={3}
+        max={4}
         current={difficulty}
         onChange={handleLevelChange}
       ></ControlPanel>

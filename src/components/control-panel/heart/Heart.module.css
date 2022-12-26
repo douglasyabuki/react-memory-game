@@ -1,37 +1,47 @@
-.heartContainer{
-    position: relative;
-    width: auto;
-    height: auto;
+.heartContainer {
+  position: relative;
+  width: auto;
+  height: auto;
 }
 
-.heart, .lostHeart{
+.heart,
+.lostHeart {
   width: 20px;
   height: 20px;
   position: relative;
   transform: rotate(45deg);
 }
 
-.heart::before, .heart::after, .lostHeart::before, .lostHeart::after {
+.heart::before,
+.heart::after,
+.lostHeart::before,
+.lostHeart::after {
   position: absolute;
-  content: '';
+  content: "";
   width: 20px;
   height: 20px;
   border-radius: 50%;
 }
 
-.heart::before, .lostHeart::before{
-    left: -10px;
+.heart::before,
+.lostHeart::before {
+  left: -10px;
 }
 
-.heart::after, .lostHeart::after{
-    top:-10px;
-    left: 0px;
+.heart::after,
+.lostHeart::after {
+  top: -10px;
+  left: 0px;
 }
 
-.heart, .heart::before, .heart::after{
-    background-color: red;
+.heart,
+.heart::before,
+.heart::after {
+  background-color: red;
 }
 
-.lostHeart, .lostHeart::before, .lostHeart::after{
-    background-color: rgb(41, 41, 41);
+.lostHeart,
+.lostHeart::before,
+.lostHeart::after {
+  background-color: rgb(41, 41, 41);
 }

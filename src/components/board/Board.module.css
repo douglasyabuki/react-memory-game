@@ -1,23 +1,26 @@
 /* Mobile First */
-.game{
-    padding: 10vh 0;
+.game {
+  padding: 5vh 0;
+  margin: 0 auto;
 }
 
-.board{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+.board {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
 }
 
-.row{
-    display: flex;
-    gap: 1rem;
+.row {
+  width: 400px;
+  justify-content: space-evenly;
+  display: flex;
 }
 
-.message{
-    height: 10vh;
-    color: white;
+.message {
+  height: 10vh;
+  color: white;
 }

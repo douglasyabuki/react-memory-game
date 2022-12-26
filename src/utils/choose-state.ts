@@ -1,11 +1,11 @@
 // Const
-import { boardList } from "../components/board/board-list/board-list"
+import { boardList } from "../components/board/board-list/board-list";
 
 // Interface
-import { IState } from "../interfaces/state"
+import { IState } from "../interfaces/State";
 
 // Utils
-import { boardShuffle } from "./board-shuffle"
+import { boardShuffle } from "./board-shuffle";
 
 const chooseLives = (difficulty: number): boolean[] => {
     switch (difficulty) {
@@ -29,6 +29,7 @@ export const chooseState = (difficulty: number): IState => {
         firstCard: undefined,
         isComparing: false,
         gameOver: '',
+        levelChangeDisabled: true,
     }
 
     return chosenState;

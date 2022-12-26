@@ -1,6 +1,7 @@
 /* Mobile First */
 
 .cardContainer {
+  margin: .5rem;
   width: 85px;
   height: 125px;
   -webkit-perspective: 1500;

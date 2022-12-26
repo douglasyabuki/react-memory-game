@@ -6,4 +6,5 @@ export interface IState {
     firstCard: number[] | undefined;
     isComparing: boolean;
     gameOver: string;
+    levelChangeDisabled: boolean;
 }

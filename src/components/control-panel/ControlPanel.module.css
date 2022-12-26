@@ -1,6 +1,7 @@
+/* Mobile First */
 .controlPanel {
-  padding: 1rem;
-  width: 300px;
+  padding: 0.1rem;
+  width: 280px;
   height: 150px;
   margin-bottom: 1rem;
   border: 2px solid #fff;
@@ -10,12 +11,65 @@
 }
 
 .controlPanel h1 {
+  font-size: 1.7em;
   margin-bottom: 1rem;
 }
 
 .heartsContainer {
+  max-width: 80%;
   align-items: center;
   justify-content: center;
-  width: 100%;
   display: flex;
+}
+
+/* Small screens */
+@media (min-width: 767.999px) {
+  .controlPanel {
+    padding-top: 1rem;
+    width: 350px;
+    height: 200px;
+  }
+
+  .controlPanel h1 {
+    font-size: 2.2em;
+  }
+}
+
+/* Small screens desktop */
+@media (min-width: 767.999px) {
+  .controlPanel {
+    padding: 0.1rem;
+    width: 280px;
+    height: 150px;
+  }
+
+  .controlPanel h1 {
+    font-size: 1.7em;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1919.999px) {
+  .controlPanel {
+    padding: 0.1rem;
+    width: 350px;
+    height: 200px;
+  }
+
+  .controlPanel h1 {
+    font-size: 2.2em;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 2559.999px) {
+  .controlPanel {
+    padding: 1rem;
+    width: 400px;
+    height: 200px;
+  }
+
+  .controlPanel h1 {
+    font-size: 2.5em;
+  }
 }

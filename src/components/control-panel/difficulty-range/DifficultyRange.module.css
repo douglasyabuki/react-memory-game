@@ -1,3 +1,4 @@
+/* Mobile First */
 .difficultyRange {
   display: flex;
   flex-direction: column;
@@ -23,7 +24,7 @@
 }
 
 .difficultyRange input:disabled {
-  opacity: .2;
+  opacity: 0.2;
 }
 
 .difficultyRange input::-webkit-slider-thumb {
@@ -40,4 +41,36 @@
   height: 20px;
   background: #4caf50;
   cursor: pointer;
+}
+
+/* Small screens */
+@media (min-width: 767.999px) {
+  .difficultyRange {
+    width: 200px;
+    height: 80px;
+  }
+
+  .difficultyRange input::-webkit-slider-thumb {
+    width: 50px;
+  }
+
+  .difficultyRange label {
+    font-size: 1.5em;
+  }
+}
+
+/* Small screens desktop */
+@media (min-width: 1023.999px){
+  .difficultyRange {
+    width: 120px;
+    height: 80px;
+  }
+
+  .difficultyRange input::-webkit-slider-thumb {
+    width: 30px;
+  }
+
+  .difficultyRange label {
+    font-size: 1.5em;
+  }
 }

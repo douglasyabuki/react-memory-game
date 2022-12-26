@@ -12,13 +12,12 @@ import produce from "immer";
 import { initialState, ActionType, reducer } from "./reducer/reducer";
 
 // Utils
-import { boardShuffle } from "../../utils/board-shuffle";
+import { chooseState } from "../../utils/choose-state";
 import { findFalseValue } from "../../utils/find-false-value";
 
 // CSS
 import RoundButton from "../round-button/RoundButton";
 import styles from "./Board.module.css";
-import { chooseState } from "../../utils/choose-state";
 
 export default function Board() {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
@@ -30,7 +29,6 @@ export default function Board() {
     lives,
     revealedBoard,
     isComparing,
-    reRender
   } = state;
 
   const onClickHandler = (rowId: number, colId: number) => {
@@ -102,21 +100,9 @@ export default function Board() {
   };
 
   const hideCards = (): void => {
-    let copy: boolean[][];
-    switch (difficulty) {
-      default:
-        copy = [...boardList.invisibleEasy];
-        break;
-      case 2:
-        copy = [...boardList.invisibleMedium];
-        break;
-      case 3:
-        copy = [...boardList.invisibleHard];
-        break;
-    }
     dispatch({
       type: ActionType.SET_REVEALED_BOARD,
-      payload: copy,
+      payload: boardList.invisible,
     });
   };
 
@@ -141,28 +127,42 @@ export default function Board() {
     dispatch({ type: ActionType.SET_LIVES, payload: copy });
   };
 
+  const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let nextState = chooseState(Number(event.target.value));
+    dispatch({
+      type: ActionType.SET_NEW_GAME,
+      payload: {
+        difficulty: nextState.difficulty,
+        currentBoard: nextState.currentBoard,
+        revealedBoard: nextState.revealedBoard,
+        lives: nextState.lives,
+        isComparing: nextState.isComparing,
+        gameOver: nextState.gameOver,
+      },
+    });
+
+  };
+
   const resetGame = () => {
     let nextState = chooseState(difficulty);
-    dispatch({type: ActionType.SET_CURRENT_BOARD, payload: nextState.board});
-    dispatch({type: ActionType.SET_REVEALED_BOARD, payload: nextState.visibleBoard});
-    dispatch({type: ActionType.SET_LIVES, payload: nextState.lives});
-    dispatch({ type: ActionType.SET_FIRST_CARD, payload: undefined });
-    
+    dispatch({
+      type: ActionType.SET_NEW_GAME,
+      payload: {
+        difficulty: nextState.difficulty,
+        currentBoard: nextState.currentBoard,
+        revealedBoard: nextState.revealedBoard,
+        lives: nextState.lives,
+        isComparing: nextState.isComparing,
+        gameOver: nextState.gameOver,
+      },
+    });
+
     setTimeout(() => {
-      dispatch({type: ActionType.SET_REVEALED_BOARD, payload: nextState.invisibleBoard});
+      hideCards();
     }, 4000);
   };
 
-  const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: ActionType.SET_DIFFICULTY,
-      payload: Number(event.target.value),
-    });
-  };
-
   useEffect(() => {
-    dispatch({ type: ActionType.SET_GAME_OVER, payload: ""});
-    resetGame();
   }, [difficulty || resetGame]);
 
   return (
@@ -174,7 +174,7 @@ export default function Board() {
         current={difficulty}
         onChange={handleLevelChange}
       ></ControlPanel>
-      {gameOver ? (
+      {gameOver !== "" ? (
         <div className={styles.gameOver}>
           <h1>{gameOver}</h1>
           <RoundButton value="Restart" onClickHandler={() => resetGame()} />

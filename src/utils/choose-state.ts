@@ -1,44 +1,35 @@
-// Lists
-import { boardList } from "../components/board/board-list/board-list";
+// Const
+import { boardList } from "../components/board/board-list/board-list"
+
+// Interface
+import { IState } from "../interfaces/state"
 
 // Utils
-import { boardShuffle } from "./board-shuffle";
+import { boardShuffle } from "./board-shuffle"
 
-// Object returned by this util
-interface IChosenBoard {
-    board: number[][];
-    visibleBoard: boolean[][];
-    invisibleBoard: boolean[][];
-    lives: boolean[];
-}
-
-// Function to choose the set of board based on difficulty
-export const chooseState = (difficulty: number):IChosenBoard => {
-    let chosenBoard: IChosenBoard;
+const chooseLives = (difficulty: number): boolean[] => {
     switch (difficulty) {
         default:
-            chosenBoard = {
-                board: boardShuffle(1),
-                visibleBoard : boardList.visibleEasy,
-                invisibleBoard : boardList.invisibleEasy,
-                lives: [true, true, true, true, true],
-            }
-            break;
+            return [true, true, true, true, true];
         case 2:
-            chosenBoard = {
-                board: boardShuffle(2),
-                visibleBoard : boardList.visibleEasy,
-                invisibleBoard : boardList.invisibleEasy,
-                lives: [true, true, true, true],
-            }
-            break;
+            return [true, true, true, true];
         case 3:
-            chosenBoard = {
-                board: boardShuffle(3),
-                visibleBoard : boardList.visibleEasy,
-                invisibleBoard : boardList.invisibleEasy,
-                lives: [true, true, true],
-            }
-            break;
-    } return chosenBoard;
+            return [true, true, true];
+        case 4:
+            return [true, true, true];
+    }
+}
+
+export const chooseState = (difficulty: number): IState => {
+    const chosenState: IState = {
+        difficulty: difficulty,
+        currentBoard: boardShuffle(difficulty),
+        revealedBoard: boardList.visible,
+        lives: chooseLives(difficulty),
+        firstCard: undefined,
+        isComparing: false,
+        gameOver: '',
+    }
+
+    return chosenState;
 }

@@ -12,6 +12,10 @@
   box-shadow: -5px -5px 10px #1a2e47, 5px 5px 10px #244065;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .card,
 .front,
 .back {

@@ -17,15 +17,33 @@ const cardsShuffle = (selectedCards: number[]): number[] => {
 }
 
 // Function to set the card values in a board
-const setter = (cards: number[], board: number[][]): number[][] => {
-    let rows = board.length;
-    let columns = board[0].length
+const setter = (cards: number[]): number[][] => {
+    let maxRows: number;
+    let maxCols: number;
+    let newBoard = [...boardList.board];
     let counter = 0;
-    let newBoard = [...board];
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < columns; col++) {
-        newBoard[row][col] = cards[counter];
-        counter++;
+    switch (cards.length){
+        default: 
+            maxRows = 3
+            maxCols = 4
+            break;
+        case 16:
+            maxRows = 4
+            maxCols = 4
+            break;
+        case 20:
+            maxRows = 4
+            maxCols = 5
+            break;
+        case 24:
+            maxRows = 4
+            maxCols = 6
+            break;
+    }
+    for (let row = 0; row < maxRows; row++) {
+      for (let col = 0; col < maxCols; col++) {
+        newBoard[row][col] = cards[counter]
+        counter++
       }
     }
     return newBoard;
@@ -34,17 +52,21 @@ const setter = (cards: number[], board: number[][]): number[][] => {
 // Function to return a shuffled board based on game difficulty
 export const boardShuffle = (difficulty: number): number[][] => {
     switch(difficulty){
+        default:{
+            let shuffledBoard = setter(cardsShuffle(cardList.easy));
+            return shuffledBoard;
+        }
         case 2:{
-            let shuffledBoard = setter(cardsShuffle(cardList.medium), boardList.medium);
+            let shuffledBoard = setter(cardsShuffle(cardList.medium));
             return shuffledBoard;
         }
         case 3:{
-            let shuffledBoard = setter(cardsShuffle(cardList.hard), boardList.hard);
+            let shuffledBoard = setter(cardsShuffle(cardList.hard));
             return shuffledBoard;
         }
-        default:{
-            let shuffledBoard = setter(cardsShuffle(cardList.easy), boardList.easy);
-            return shuffledBoard;
+        case 4:{
+            let shuffledBoard = setter(cardsShuffle(cardList.hardest));
+            return shuffledBoard; 
         }
     }
 }

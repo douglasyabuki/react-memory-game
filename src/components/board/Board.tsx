@@ -17,7 +17,9 @@ import RoundButton from "../round-button/RoundButton";
 import { boardList } from "./board-list/board-list";
 import styles from "./Board.module.css";
 
+// Board main function
 export default function Board() {
+  // The states are controlled by the hook useImmerReducer
   const [state, dispatch] = useImmerReducer(reducer, initialState);
   const {
     currentBoard,
@@ -30,23 +32,19 @@ export default function Board() {
     levelChangeDisabled,
   } = state;
 
+  // Function to flip the card on click if the conditions are satisfied
   const onClickHandler = (rowId: number, colId: number) => {
-    // Cannot click if the cards are currently being compared
     if (isComparing) {
       return;
     }
-    // Cannot click if game is over
     if (isOver()) {
       return;
     }
-    // Cannot select if card is already face up
     if (!isValidCard(rowId, colId)) {
       console.log("Invalid card. This one is already face up.");
       return;
     }
-    // Shows card on click
     showCard(rowId, colId);
-    // If it is not the first card, sets the value to the first card
     if (!firstCard) {
       dispatch({ type: ActionType.SET_FIRST_CARD, payload: [rowId, colId] });
       return;
@@ -63,6 +61,7 @@ export default function Board() {
     isOver();
   };
 
+  // Function to check if the game is over and change gameOver's state
   const isOver = (): boolean => {
     if (countLives() < 1) {
       dispatch({ type: ActionType.SET_GAME_OVER, payload: "You lose" });
@@ -75,10 +74,12 @@ export default function Board() {
     return false;
   };
 
+  // Function to check if the clicked card is a valid selection
   const isValidCard = (row: number, col: number): boolean => {
     return revealedBoard[row][col] === true ? false : true;
   };
 
+  // Function to flip the card face up
   const showCard = (row: number, col: number): void => {
     dispatch({
       type: ActionType.SET_REVEALED_BOARD,
@@ -88,6 +89,7 @@ export default function Board() {
     });
   };
 
+  // Function to flip face down the last selected pair of cards
   const hidePair = (row: number, col: number): void => {
     dispatch({
       type: ActionType.SET_REVEALED_BOARD,
@@ -98,6 +100,7 @@ export default function Board() {
     });
   };
 
+  // Function to flip face down all cards
   const hideCards = (): void => {
     dispatch({
       type: ActionType.SET_REVEALED_BOARD,
@@ -105,17 +108,20 @@ export default function Board() {
     });
   };
 
+  // Function to check if the last selected pair of cards have the same value
   const compareCards = (row: number, col: number): boolean => {
     return currentBoard[row][col] === currentBoard[firstCard![0]][firstCard![1]]
       ? true
       : false;
   };
 
+  // Function to count lives
   const countLives = (): number => {
     let count = lives.filter((x) => x === true).length;
     return count;
   };
 
+  // Function to remove life
   const removeLife = (): void => {
     let count = countLives();
     if (count < 1) {
@@ -126,6 +132,7 @@ export default function Board() {
     dispatch({ type: ActionType.SET_LIVES, payload: copy });
   };
 
+  // Function to handle difficulty change onClick
   const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: ActionType.SET_DIFFICULTY,
@@ -133,6 +140,7 @@ export default function Board() {
     });
   };
 
+  // Function to set a new state based on difficulty level
   const resetGame = () => {
     let nextState = chooseState(difficulty);
     dispatch({
@@ -147,20 +155,22 @@ export default function Board() {
         levelChangeDisabled: nextState.levelChangeDisabled,
       },
     });
-
+    // Cards are hidden after 4 seconds and user is able to change level again
     setTimeout(() => {
       hideCards();
       dispatch({
         type: ActionType.SET_LEVEL_CHANGE_DISABLED,
-        payload: false
-      })
+        payload: false,
+      });
     }, 4000);
   };
 
+  // Triggers a reset whenever the difficulty changes
   useEffect(() => {
     resetGame();
   }, [difficulty]);
 
+  // Returns the game itself
   return (
     <div className={styles.game}>
       <ControlPanel

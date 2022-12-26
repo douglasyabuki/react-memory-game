@@ -16,6 +16,7 @@ export interface IGameOptions {
   lives: boolean[];
 }
 
+// Control panel main function
 export default function ControlPanel({
   disabled,
   min,
@@ -24,6 +25,8 @@ export default function ControlPanel({
   onChange,
   lives,
 }: IGameOptions) {
+
+  // Returns the control panel to Board.tsx
   return (
     <div className={styles.controlPanel}>
       <h1>React + TS Memory Game</h1>

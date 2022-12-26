@@ -1,3 +1,4 @@
+// Game state interface
 export interface IState {
     difficulty: number;
     currentBoard: number[][];

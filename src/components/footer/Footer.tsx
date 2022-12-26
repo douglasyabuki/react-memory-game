@@ -1,7 +1,10 @@
 // CSS
 import styles from "./Footer.module.css";
 
+// Footer main function
 export default function Footer() {
+
+  // Returns the footer to App.tsx
   return (
     <footer className={styles.footer}>
       <div className={styles.social}>

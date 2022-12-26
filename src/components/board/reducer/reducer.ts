@@ -4,8 +4,8 @@ import produce from "immer";
 // Utils
 import { chooseState } from "../../../utils/choose-state";
 
+// The game initial states are set below
 const chosenInitialState = chooseState(1);
-
 export const initialState = {
   difficulty: chosenInitialState.difficulty,
   currentBoard: chosenInitialState.currentBoard,
@@ -17,6 +17,7 @@ export const initialState = {
   levelChangeDisabled: chosenInitialState.levelChangeDisabled
 };
 
+// Defines the type of each State's param
 type State = {
   difficulty: number;
   currentBoard: number[][];
@@ -40,11 +41,13 @@ export enum ActionType {
   SET_LEVEL_CHANGE_DISABLED = "SET_LEVEL_CHANGE_DISABLED"
 }
 
+
 interface Action {
   type: ActionType;
   payload?: any;
 }
 
+// This is the reducer of Board.tsx state functions
 export const reducer = (state: State, action: Action) =>
   produce(state, (draft) => {
     switch (action.type) {

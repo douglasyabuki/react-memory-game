@@ -1,3 +1,4 @@
+// List of values based on difficulty
 export const cardList = {
     easy: [1, 2, 3, 4, 5, 6],
     medium: [1, 2, 3, 4, 5, 6, 7, 8],

@@ -7,6 +7,7 @@ import { IState } from "../interfaces/State";
 // Utils
 import { boardShuffle } from "./board-shuffle";
 
+// Function to select the amount of lives based on difficulty
 const chooseLives = (difficulty: number): boolean[] => {
     switch (difficulty) {
         default:
@@ -20,6 +21,7 @@ const chooseLives = (difficulty: number): boolean[] => {
     }
 }
 
+// Function to select all states based on difficulty
 export const chooseState = (difficulty: number): IState => {
     const chosenState: IState = {
         difficulty: difficulty,

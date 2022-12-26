@@ -7,6 +7,7 @@
   justify-content: center;
   position: relative;
   width: 100%;
+  min-height: 10vh;
   height: 10vh;
   max-height: 10vh;
   background-color: #1f232d;
@@ -56,5 +57,9 @@
   .footer {
     font-size: 30px;
     padding: 2.7rem 0;
+  }
+
+  .social {
+    display: none;
   }
 }

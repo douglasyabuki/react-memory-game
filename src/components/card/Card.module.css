@@ -92,8 +92,8 @@
   }
 }
 
-/* Medium screens */
-@media (min-width: 1439.999px) {
+/* Large screens */
+@media (min-width: 1919.999px) {
   .cardContainer {
     width: 100px;
     height: 148px;
@@ -104,27 +104,15 @@
   }
 }
 
-/* Large screens */
-@media (min-width: 1919.999px) {
+/* Extra large screens */
+@media (min-width: 2559.999px) {
   .cardContainer {
+    margin: 0.5rem;
     width: 110px;
     height: 163px;
   }
 
   .cardContainer:hover {
     border-radius: 110px;
-  }
-}
-
-/* Extra large screens */
-@media (min-width: 2559.999px) {
-  .cardContainer {
-    margin: .5rem;
-    width: 130px;
-    height: 195px;
-  }
-
-  .cardContainer:hover {
-    border-radius: 130px;
   }
 }

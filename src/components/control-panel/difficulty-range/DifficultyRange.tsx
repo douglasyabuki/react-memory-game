@@ -11,6 +11,7 @@ interface Props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+// Difficulty Range main function
 export default function DifficultyRange({
   disabled,
   min,
@@ -18,6 +19,8 @@ export default function DifficultyRange({
   current,
   onChange,
 }: Props) {
+  
+  // Returns an input type "range" to ControlPanel.tsx
   return (
     <div className={styles.difficultyRange}>
       <label>Level</label>

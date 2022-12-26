@@ -60,7 +60,7 @@
 }
 
 /* Small screens desktop */
-@media (min-width: 1023.999px){
+@media (min-width: 1023.999px) {
   .difficultyRange {
     width: 120px;
     height: 80px;

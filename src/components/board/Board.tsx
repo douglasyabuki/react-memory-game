@@ -34,14 +34,13 @@ export default function Board() {
 
   // Function to flip the card on click if the conditions are satisfied
   const onClickHandler = (rowId: number, colId: number) => {
-    if (isComparing) {
+    if (isComparing || levelChangeDisabled) {
       return;
     }
     if (isOver()) {
       return;
     }
     if (!isValidCard(rowId, colId)) {
-      console.log("Invalid card. This one is already face up.");
       return;
     }
     showCard(rowId, colId);
@@ -58,7 +57,6 @@ export default function Board() {
       }, 1000);
     }
     dispatch({ type: ActionType.SET_FIRST_CARD, payload: undefined });
-    isOver();
   };
 
   // Function to check if the game is over and change gameOver's state
@@ -170,6 +168,13 @@ export default function Board() {
     resetGame();
   }, [difficulty]);
 
+  // Triggers the function that checks if the game is over
+  useEffect(() =>{
+    if (!levelChangeDisabled) {
+      isOver();
+    }
+  }, [gameOver,lives])
+
   // Returns the game itself
   return (
     <div className={styles.game}>
@@ -183,8 +188,8 @@ export default function Board() {
       ></ControlPanel>
       {gameOver !== "" ? (
         <div className={styles.gameOver}>
-          <h1>{gameOver}</h1>
-          <RoundButton value="Restart" onClickHandler={() => resetGame()} />
+          <h2>{gameOver}</h2>
+          <RoundButton value="Play again" onClickHandler={() => resetGame()} />
         </div>
       ) : (
         <div className={styles.board}>

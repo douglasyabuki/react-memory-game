@@ -8,15 +8,26 @@
 }
 
 .buttonContainer button {
-  height: 75px;
-  width: 75px;
+  height: 120px;
+  width: 120px;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 20px;
   background: #152659;
-  box-shadow: -7px -7px 14px #080f24, 7px 7px 14px #223d8e;
-  color: #f2f2f2;
+  opacity: 0.8;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: -14px -14px 28px #080f24, 14px 14px 28px #223d8e;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .buttonContainer button:hover {
+  opacity: 1;
   box-shadow: -15px -15px 30px #101c42, 15px 15px 30px #1a3090;
+}
+
+/* iPads & Tablets */
+@media (min-width: 479.999px) {
+  .buttonContainer button {
+    height: 150px;
+    width: 150px;
+  }
 }

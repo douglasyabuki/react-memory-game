@@ -21,9 +21,16 @@
   justify-content: space-between;
 }
 
-.message {
+.gameOver {
+  padding-top: 10vh;
   height: 10vh;
-  color: white;
+}
+
+.gameOver h2{
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 /* iPads & Tablets */
@@ -34,6 +41,11 @@
 
   .board {
     width: 480px;
+  }
+
+  .gameOver h2{
+    font-size: 2em;
+    margin-bottom: 2rem;
   }
 }
 

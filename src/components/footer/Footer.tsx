@@ -9,13 +9,13 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.social}>
         <a href="https://www.linkedin.com/in/douglas-yabuki/" target="_blank">
-          <img src="/linkedin.png" width="40" height="40" />
+          <img src="/linkedin.png"/>
         </a>
         <a href="https://github.com/douglasyabuki/" target="_blank">
-          <img src="/github.png" width="40" height="40" />
+          <img src="/github.png"/>
         </a>
         <a href="mailto:douglasyabuki@gmail.com" target="_blank">
-          <img src="/mail.png" width="40" height="40" />
+          <img src="/mail.png"/>
         </a>
       </div>
       <h3>Douglas Yuji Yabuki @2022</h3>

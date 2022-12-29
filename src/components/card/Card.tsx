@@ -1,6 +1,9 @@
 // CSS
 import styles from "./Card.module.css";
 
+// Hooks
+import { useState } from "react";
+
 // Props destructuring
 interface ICardProps {
   value: number;

@@ -10,6 +10,7 @@ import { ActionType, initialState, reducer } from "./reducer/reducer";
 
 // Utils
 import { chooseState } from "../../utils/choose-state";
+import { flipSound } from "../../utils/flip-sound";
 import { findFalseValue } from "../../utils/find-false-value";
 
 // CSS
@@ -174,6 +175,11 @@ export default function Board() {
       isOver();
     }
   }, [gameOver,lives])
+
+  // Triggers the flip card sound whenever the revealed card changes
+  useEffect(() => {
+    flipSound();
+  }, [revealedBoard])
 
   // Returns the game itself
   return (
